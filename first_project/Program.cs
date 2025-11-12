@@ -1,162 +1,175 @@
-```csharp
-using System;
+﻿using System.Linq.Expressions;
 
-public class MainClass
+namespace sueta
 {
-    static string word;
-    static string current;
-    static int score;
-
-    public static void Main()
+    internal class Program
     {
-        StartGame();
-        
-        while (current != word)
+        static void Main(string[] args)
         {
-            ShowScore();
-            PlayTurn();
+            //string word = Console.ReadLine();
+            //int num = Convert.ToInt32(Console.ReadLine());
+            //int[] numbers = [1, 2, 3, 4, 7];
+            //double s = Convert.ToDouble(Console.ReadLine());
+            char s = Convert.ToChar(Console.ReadLine());
+            Console.WriteLine(TranslationCapitalLetter(s));
         }
-        
-        EndGame();
-    }
-
-    static void StartGame()
-    {
-        string words = "метро автобус такси трамвай поезд самолет велосипед";
-        string[] arr = words.Split(' ');
-        word = arr[new Random().Next(0, arr.Length)];
-        
-        current = "";
-        for (int i = 0; i < word.Length; i++)
+        static bool CheckParity(int num)//1
         {
-            current += "_";
-        }
-        
-        Console.WriteLine("Для угадывания слова напишите: 'слово'");
-        Console.WriteLine();
-    }
-
-    static void ShowScore()
-    {
-        Console.WriteLine("Очки: " + score);
-        Console.WriteLine();
-    }
-
-    static void PlayTurn()
-    {
-        string[] sectors = {"П", "+", "350", "450", "550", "600", "650", "Б", "х2", "700", "300", "400", "500"};
-        string sector = sectors[new Random().Next(0, sectors.Length)];
-        
-        if (sector == "Б")
-        {
-            Console.WriteLine("Банкрот! Все пропало!");
-            score = 0;
-            return;
-        }
-        
-        if (sector == "+")
-        {
-            Console.WriteLine(current);
-            Console.WriteLine("Открыть букву под номером:");
-            int num = int.Parse(Console.ReadLine());
-            
-            string temp = "";
-            for (int i = 0; i < current.Length; i++)
+            bool check = false;
+            if (num % 2 == 0)
             {
-                if (i == num - 1)
+                check = true;
+
+            }
+            return check;
+
+        }
+        static int Factorial(int num)//2
+        {
+            int factorial = 1;
+            for (int i = 1; i<=num; i++)
+            {
+                factorial = i * factorial;
+            }
+            return factorial;
+        }
+        static int CountVowels(string word)//3
+        {
+            string vowels = "aeiouy";
+            int countVowels = 0;
+            foreach (char c in word)
+            {
+				if (vowels.Contains(c))
+				{
+					countVowels++;
+				}
+			}
+            return countVowels;
+        }
+        static bool FindPolindrom(string word)//4
+        {
+            bool polindrom = false;
+            string newString = "";
+            for (int i = word.Length - 1;i >= 0; i--)
+            {
+                newString.Append(word[i]);
+            }
+            if (newString == word)
+            {
+                polindrom = true;
+            }
+            Console.Write(newString + " ");
+            return polindrom;
+        }
+        static int FindMax(int[] numbers)//5
+        {
+			int max = numbers[1];
+			for (int i = 0; i <= numbers.Length - 1; i++)
+            {
+                if (numbers[i] > max)
+                    max = numbers[i];
+            }
+            return max;
+        }
+        static bool FindPrimeNum(int num)//6
+        {
+            bool primeNum = false;
+            if (num < 2)
+                return primeNum;
+            for (int i = 2; i * i <= num; i++)
+            {
+                if (num % i == 0)
                 {
-                    temp += word[num - 1];
-                }
-                else
-                {
-                    temp += current[i];
+                    return primeNum;
                 }
             }
-            current = temp;
-            Console.WriteLine(current);
-            return;
+            primeNum = true;
+            return primeNum;
         }
-        
-        if (sector == "х2")
+        static char TranslationCapitalLetter(char s)//7
         {
-            Console.WriteLine("Удвоение! Следующая буква х2");
-            return;
-        }
-        
-        if (sector == "П")
-        {
-            string[] gifts = {"10 по колоку", "0 по колоку", "габелла на сессии", "похвала и почет", "+респект", "14к в дотке", "шиза", "приора для орг"};
-            string gift = gifts[new Random().Next(0, gifts.Length)];
-            Console.WriteLine("Ваш приз: " + gift);
-            current = word;
-            return;
-        }
-        
-        int points = int.Parse(sector);
-        Console.WriteLine("Выпало: " + points + " очков");
-        Console.WriteLine("Буква:");
-        
-        string cmd = Console.ReadLine();
-        
-        if (cmd == "слово")
-        {
-            Console.WriteLine("Ваш вариант:");
-            string guess = Console.ReadLine();
-            if (guess == word)
-            {
-                Console.WriteLine("Правильно! Победа!");
-                current = word;
-            }
-            else
-            {
-                Console.WriteLine("Не угадали!");
-            }
-            return;
-        }
-        
-        char letter = cmd[0];
-        string newCurrent = "";
-        for (int i = 0; i < word.Length; i++)
-        {
-            if (word[i] == letter)
-            {
-                newCurrent += letter;
-            }
-            else
-            {
-                newCurrent += current[i];
-            }
-        }
-        
-        if (newCurrent != current)
-        {
-            score += points;
-            Console.WriteLine("Есть буква!");
-        }
-        
-        current = newCurrent;
-        Console.WriteLine(current);
-    }
+            char[] Letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
-    static void EndGame()
-    {
-        Console.WriteLine("Игра окончена! Слово: " + word);
-        Console.WriteLine("Очки: " + score);
-        
-        string[] prizes = {"Кружка", "Футболка", "Блокнот", "Ручка", "Брелок"};
-        int[] costs = {100, 500, 200, 50, 300};
-        
-        Console.WriteLine("Выбор приза:");
-        for (int i = 0; i < prizes.Length; i++)
-        {
-            Console.WriteLine((i+1) + ") " + prizes[i] + " - " + costs[i]);
+			for (int i = 0; i < Letters.Length - 1; i++)
+            {
+                if (s == Letters[i])
+                {
+                    s = char.ToUpper(s);
+                }
+            }
+            return s;
         }
-        
-        int choice = int.Parse(Console.ReadLine());
-        if (costs[choice - 1] <= score)
+        static string MakeCamelCase(string word)//8
         {
-            Console.WriteLine("Ваш приз: " + prizes[choice - 1]);
+            string[] words = word.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (words.Length == 1)
+                return words[0].ToLower();
+            string result = words[0].ToLower();
+            for (int i = 1; i < words.Length; i++)
+            {
+                string wordy = words[i];
+                if (!string.IsNullOrEmpty(wordy))
+                {
+                    result += char.ToUpper(wordy[0]) + wordy.Substring(1).ToLower();
+                }
+            }
+
+            return result;
+        }
+        static bool ValidPhoneNumber(string word)
+        {
+            if (string.IsNullOrEmpty(word))
+                return false;
+            string[] parts = word.Split('-');
+            if (parts.Length != 5)
+                return false;
+            if (parts[0] != "+7")
+                return false;
+
+            if (parts[1].Length != 3 || !IsAllDigits(parts[1])) return false;
+            if (parts[2].Length != 3 || !IsAllDigits(parts[2])) return false;
+            if (parts[3].Length != 2 || !IsAllDigits(parts[3])) return false;
+            if (parts[4].Length != 2 || !IsAllDigits(parts[4])) return false;
+
+            return true;
+        }
+        static bool IsAllDigits(string word)//9
+        {
+            foreach (char c in word)
+            {
+                if (!char.IsDigit(c))
+                    return false;
+            }
+            return true;
+        }
+        static string FormatMoney(double s)//10
+        {
+            return s.ToString("N2").Replace(",", " ");
+        }
+        static int[] WithdrawMoneySimple(int num, int[] numbers)//11
+        {
+            Array.Sort(numbers);
+            Array.Reverse(numbers);
+            int[] counts = new int[numbers.Length];
+            int remaining = num;
+
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                counts[i] = remaining / numbers[i];
+                remaining %= numbers[i];
+            }
+            if (remaining != 0)
+                return new int[0];
+
+            List<int> result = new List<int>();
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                for (int j = 0; j < counts[i]; j++)
+                {
+                    result.Add(numbers[i]);
+                }
+            }
+            return result.ToArray();
         }
     }
 }
-```
